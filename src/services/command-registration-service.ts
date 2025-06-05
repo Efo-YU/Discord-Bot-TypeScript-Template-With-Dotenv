@@ -10,8 +10,9 @@ import { createRequire } from 'node:module';
 
 import { Logger } from './logger.js';
 
+const DISCORD_BOT_ID = process.env.DISCORD_BOT_ID;
+
 const require = createRequire(import.meta.url);
-let Config = require('../../config/config.json');
 let Logs = require('../../lang/logs.json');
 
 export class CommandRegistrationService {
@@ -22,7 +23,7 @@ export class CommandRegistrationService {
         args: string[]
     ): Promise<void> {
         let remoteCmds = (await this.rest.get(
-            Routes.applicationCommands(Config.client.id)
+            Routes.applicationCommands(DISCORD_BOT_ID)
         )) as RESTGetAPIApplicationCommandsResult;
 
         let localCmdsOnRemote = localCmds.filter(localCmd =>
@@ -57,7 +58,7 @@ export class CommandRegistrationService {
                         )
                     );
                     for (let localCmd of localCmdsOnly) {
-                        await this.rest.post(Routes.applicationCommands(Config.client.id), {
+                        await this.rest.post(Routes.applicationCommands(DISCORD_BOT_ID), {
                             body: localCmd,
                         });
                     }
@@ -72,7 +73,7 @@ export class CommandRegistrationService {
                         )
                     );
                     for (let localCmd of localCmdsOnRemote) {
-                        await this.rest.post(Routes.applicationCommands(Config.client.id), {
+                        await this.rest.post(Routes.applicationCommands(DISCORD_BOT_ID), {
                             body: localCmd,
                         });
                     }
@@ -105,7 +106,7 @@ export class CommandRegistrationService {
                 let body: RESTPatchAPIApplicationCommandJSONBody = {
                     name: newName,
                 };
-                await this.rest.patch(Routes.applicationCommand(Config.client.id, remoteCmd.id), {
+                await this.rest.patch(Routes.applicationCommand(DISCORD_BOT_ID, remoteCmd.id), {
                     body,
                 });
                 Logger.info(Logs.info.commandActionRenamed);
@@ -129,7 +130,7 @@ export class CommandRegistrationService {
                 Logger.info(
                     Logs.info.commandActionDeleting.replaceAll('{COMMAND_NAME}', remoteCmd.name)
                 );
-                await this.rest.delete(Routes.applicationCommand(Config.client.id, remoteCmd.id));
+                await this.rest.delete(Routes.applicationCommand(DISCORD_BOT_ID, remoteCmd.id));
                 Logger.info(Logs.info.commandActionDeleted);
                 return;
             }
@@ -140,7 +141,7 @@ export class CommandRegistrationService {
                         this.formatCommandList(remoteCmds)
                     )
                 );
-                await this.rest.put(Routes.applicationCommands(Config.client.id), { body: [] });
+                await this.rest.put(Routes.applicationCommands(DISCORD_BOT_ID), { body: [] });
                 Logger.info(Logs.info.commandActionCleared);
                 return;
             }

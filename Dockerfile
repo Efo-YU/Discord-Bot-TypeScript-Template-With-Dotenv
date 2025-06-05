@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:24-slim
 
 # Create app directory
 WORKDIR /app
@@ -19,4 +19,4 @@ RUN npm run build
 EXPOSE 3001
 
 # Run the application
-CMD [ "node", "dist/start-manager.js" ]
+CMD ["sh", "-c", "node --enable-source-maps dist/start-bot.js commands register && node dist/start-manager.js"]

@@ -33,6 +33,8 @@ import {
 } from './services/index.js';
 import { Trigger } from './triggers/index.js';
 
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
 let Logs = require('../lang/logs.json');
@@ -101,7 +103,7 @@ async function start(): Promise<void> {
 
     // Bot
     let bot = new Bot(
-        Config.client.token,
+        DISCORD_BOT_TOKEN,
         client,
         guildJoinHandler,
         guildLeaveHandler,
@@ -115,7 +117,7 @@ async function start(): Promise<void> {
     // Register
     if (process.argv[2] == 'commands') {
         try {
-            let rest = new REST({ version: '10' }).setToken(Config.client.token);
+            let rest = new REST({ version: '10' }).setToken(DISCORD_BOT_TOKEN);
             let commandRegistrationService = new CommandRegistrationService(rest);
             let localCmds = [
                 ...Object.values(ChatCommandMetadata).sort((a, b) => (a.name > b.name ? 1 : -1)),

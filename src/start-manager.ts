@@ -9,6 +9,8 @@ import { Manager } from './models/manager.js';
 import { HttpService, JobService, Logger, MasterApiService } from './services/index.js';
 import { MathUtils, ShardUtils } from './utils/index.js';
 
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+
 const require = createRequire(import.meta.url);
 let Config = require('../config/config.json');
 let Debug = require('../config/debug.json');
@@ -31,11 +33,11 @@ async function start(): Promise<void> {
         if (Config.clustering.enabled) {
             let resBody = await masterApiService.login();
             shardList = resBody.shardList;
-            let requiredShards = await ShardUtils.requiredShardCount(Config.client.token);
+            let requiredShards = await ShardUtils.requiredShardCount(DISCORD_BOT_TOKEN);
             totalShards = Math.max(requiredShards, resBody.totalShards);
         } else {
             let recommendedShards = await ShardUtils.recommendedShardCount(
-                Config.client.token,
+                DISCORD_BOT_TOKEN,
                 Config.sharding.serversPerShard
             );
             shardList = MathUtils.range(0, recommendedShards);
@@ -52,7 +54,7 @@ async function start(): Promise<void> {
     }
 
     let shardManager = new ShardingManager('dist/start-bot.js', {
-        token: Config.client.token,
+        token: DISCORD_BOT_TOKEN,
         mode: Debug.override.shardMode.enabled ? Debug.override.shardMode.value : 'process',
         respawn: true,
         totalShards,
