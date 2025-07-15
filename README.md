@@ -5,7 +5,7 @@
 [![Stars](https://img.shields.io/github/stars/Efo-YU/Discord-Bot-TypeScript-Template-With-Dotenv.svg)](https://github.com/Efo-YU/Discord-Bot-TypeScript-Template-With-Dotenv/stargazers)
 [![Pull Requests](https://img.shields.io/badge/Pull%20Requests-Welcome!-brightgreen)](https://github.com/Efo-YU/Discord-Bot-TypeScript-Template-With-Dotenv/pulls)
 
-This fork modifies the original template to use a `.env` file instead of `config/config.json` for setting credentials such as IDs and tokens, and includes adjustments to the `Dockerfile`. These changes make it easier to deploy to PaaS.
+This fork modifies the original template to use a `.env` file instead of `config/config.json` for setting credentials such as IDs and tokens, and includes adjustments to the `Dockerfile`. These changes facilitate deployment across any type of infrastructure.
 
 # Setup
 
